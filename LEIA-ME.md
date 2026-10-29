@@ -15,7 +15,7 @@ teste-apps-script.js           testes do .gs, rodam no Node sem precisar do Goog
 
 ---
 
-## Antes de publicar — 4 coisas obrigatórias
+## Antes de publicar
 
 ### 1. Ligar a gravação dos leads  ⚠️ sem isso nenhum lead é salvo
 
@@ -38,11 +38,11 @@ linha aparece na planilha. Se abrir o console do navegador (F12) e houver um avi
 > Toda vez que você alterar o `.gs`, precisa fazer **Implantar → Gerenciar implantações →
 > editar → Nova versão**. Sem isso a URL continua servindo o código antigo.
 
-### 2. Trocar o domínio nas meta tags
+### 2. Domínio nas meta tags  ✅ feito
 
-Em `index.html`, procure por `SEU-DOMINIO.com.br` (3 ocorrências, linhas 11, 15 e 18) e troque pelo endereço real.
-São as tags `canonical`, `og:url` e `og:image` — elas controlam o preview que aparece quando
-alguém manda o link no WhatsApp. Precisam ser URLs absolutas, com `https://`.
+As tags `canonical`, `og:url` e `og:image` já apontam para `https://produtivo.estudyou.com`
+(linhas 11, 15 e 18 do `index.html`). São elas que controlam o preview exibido quando
+alguém manda o link no WhatsApp. Se o domínio mudar, troque nas três.
 
 ### 3. Fechar a política de privacidade
 
@@ -60,52 +60,62 @@ topo, o CTA final e o telefone embaixo dele. Formato: `55` + DDD + número, só 
 
 ---
 
-## Colocando no servidor
+## Colocando no servidor (Coolify)
 
-É um site estático: basta servir a pasta. Qualquer servidor web serve.
+O servidor roda **Coolify** em `painel.client4you.com.br`, projeto **infoco teste.**,
+ambiente **production**. O domínio `produtivo.estudyou.com` já aponta para lá.
 
-**Nginx**
+O Coolify não aceita upload de pasta: ele puxa de um Git ou constrói um Dockerfile.
+Usamos Git — assim atualizar o site vira `git push`.
 
-```nginx
-server {
-    listen 443 ssl http2;
-    server_name SEU-DOMINIO.com.br;
+**Criando o recurso (uma vez só)**
 
-    root /var/www/in-foco;
-    index index.html;
+1. No projeto → **+ New** → **Public Repository** (ou *Private Repository with Deploy Key*,
+   se o repo for fechado).
+2. Cole a URL do repositório e selecione o branch `master`.
+3. **Build Pack: Dockerfile** — não "Static" nem "Nixpacks". O `Dockerfile` da raiz já
+   monta o nginx com os cabeçalhos e o cache corretos.
+4. **Port: 80** (é o que o container expõe).
+5. Em **Domains**, informe `https://produtivo.estudyou.com`. O Coolify emite o certificado
+   via Let's Encrypt automaticamente — o TLS é terminado no proxy dele (Traefik), e por isso
+   o `nginx.conf` daqui fala HTTP puro dentro do container.
+6. **Deploy**.
 
-    # ssl_certificate ...;   (use certbot --nginx para gerar)
+**Atualizando depois**
 
-    location / {
-        try_files $uri $uri/ =404;
-    }
-
-    # os assets têm nome fixo; se trocar uma imagem, renomeie o arquivo
-    # para o navegador não servir a versão antiga do cache
-    location /assets/ {
-        expires 30d;
-        add_header Cache-Control "public";
-    }
-
-    location = /index.html {
-        add_header Cache-Control "no-cache";
-    }
-
-    gzip on;
-    gzip_types text/html text/css application/javascript image/svg+xml;
-}
+```bash
+git add -A && git commit -m "o que mudou" && git push
 ```
 
-**Apache** — copie a pasta para o diretório do virtual host. Não precisa de `.htaccess`:
-não há rewrite nem rota dinâmica.
+Se o webhook estiver ligado, o Coolify redeploya sozinho. Senão, clique em **Redeploy** no painel.
+
+**Os dois arquivos de infraestrutura**
+
+- `Dockerfile` — `nginx:1.27-alpine` + os arquivos estáticos. Sem build, sem dependências.
+- `nginx.conf` — rotas, gzip, cache e cabeçalhos de segurança.
+
+Cuidado ao mexer no `nginx.conf`: um `add_header` dentro de um `location` **descarta todos os
+herdados do `server`**. É por isso que os cabeçalhos de segurança aparecem repetidos em cada
+`location` — não é descuido. Se criar um `location` novo, repita-os lá também.
+
+Para conferir qualquer alteração antes de subir:
+
+```bash
+docker build -t infoco-landing . && docker run --rm -p 8098:80 infoco-landing
+curl -sI http://localhost:8098/        # deve trazer Cache-Control: no-cache + os 3 de segurança
+```
 
 **Checklist pós-deploy**
 
-- [ ] A página abre em `https://` (o formulário pede dados pessoais; sem TLS não publique)
-- [ ] O logo aparece no topo e no rodapé (se não, o caminho de `assets/` está errado)
+- [ ] A página abre em `https://produtivo.estudyou.com` com cadeado válido
+- [ ] O logo aparece no topo e no rodapé (se não, o `COPY assets/` falhou no build)
+- [ ] `/privacidade.html` abre e **não** está mais com o aviso vermelho de rascunho
 - [ ] Mandar o link para si mesmo no WhatsApp e ver se o preview carrega a imagem
 - [ ] Preencher o formulário e confirmar a linha na planilha
 - [ ] Clicar em "Quero economizar agora" e ver a coluna **Clicou no WhatsApp** virar "Sim"
+
+> Os dois últimos itens só passam depois do `LEAD_ENDPOINT` configurado.
+> Enquanto ele estiver vazio, a página sobe e funciona, mas não registra nada.
 
 ---
 
