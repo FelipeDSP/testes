@@ -45,14 +45,20 @@ As tags `canonical`, `og:url` e `og:image` já apontam para `https://produtivo.e
 (linhas 11, 15 e 18 do `index.html`). São elas que controlam o preview exibido quando
 alguém manda o link no WhatsApp. Se o domínio mudar, troque nas três.
 
-### 3. Fechar a política de privacidade
+### 3. Política de privacidade  ✅ feito
 
-`privacidade.html` está marcado como rascunho e tem campos em `[COLCHETES]`: e-mail de contato,
-encarregado (DPO), prazo de retenção e data. Preencha, passe pelo jurídico e **apague o bloco
-de aviso vermelho** (está comentado no HTML indicando onde).
+`privacidade.html` está publicável, sem campos pendentes. O canal para pedidos de
+exclusão e acesso a dados é o **WhatsApp (69) 99956-5508** — o mesmo que já aparece
+na landing. O formulário exige o aceite marcado, e o consentimento fica registrado
+na coluna **Consentimento** da planilha, porque a LGPD pede que ele seja comprovável.
 
-O formulário agora exige o aceite marcado, e o consentimento fica registrado na coluna
-**Consentimento** da planilha — a LGPD pede que ele seja comprovável, não só coletado.
+Não há DPO nomeado no texto: a lei pede que o encarregado seja designado, mas não
+inventei um nome. Se vocês designarem alguém, acrescente na seção 1. O prazo de
+retenção está descrito por critério ("enquanto durar o interesse comercial") em vez
+de um número fixo — se preferirem cravar um prazo, é a seção 6.
+
+Vale uma leitura do jurídico quando sobrar tempo. O texto descreve corretamente o que
+a página coleta, mas quem responde por ele é a empresa.
 
 ### 4. Conferir o telefone
 
