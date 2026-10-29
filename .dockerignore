@@ -1,0 +1,5 @@
+*.bak
+.git
+LEIA-ME.md
+teste-apps-script.js
+apps-script-leads-in-foco.gs

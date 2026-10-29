@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>In Foco · Calculadora de Perdas</title>
+<meta name="description" content="Descubra quanto a distração digital custa para a sua empresa por mês e por ano, e quanto custa resolver com o In Foco.">
+<meta name="theme-color" content="#F59600">
+
+<!-- TROCAR o domínio abaixo pelo endereço real antes de publicar (og:url e og:image precisam ser absolutos). -->
+<link rel="canonical" href="https://produtivo.estudyou.com/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="In Foco">
+<meta property="og:url" content="https://produtivo.estudyou.com/">
+<meta property="og:title" content="Quanto a distração digital está custando para a sua empresa?">
+<meta property="og:description" content="Calcule em 30 segundos, em reais, quanto a distração digital pesa na folha da sua empresa por mês e por ano.">
+<meta property="og:image" content="https://produtivo.estudyou.com/assets/og-in-foco.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap">
+<style>
+body{margin:0}
+/* Layout: faixa laranja de marca → herói com formulário (etapa 1) → calculadora sobre marinho com propaganda ao lado (etapa 2) → plano → CTA laranja. */
+:root{
+  --laranja:#F59600; --laranja-texto:#C47800; --laranja-tenue:#FDEFD9;
+  --marinho:#0B2B51; --marinho-2:#123A68; --sobre-marinho:#FFFFFF; --sobre-marinho-2:#B9C6D8;
+  --grafite:#1A1A1A; --fundo:#FFF8EE; --superficie:#FFFFFF; --tinta:#1A1A1A; --tinta-2:#55524C; --tinta-3:#8A8780; --borda:#E7E3DA;
+  --verde:#066212; --verde-tenue:#DAEBDC; --erro:#A32218; --erro-tenue:#FBEAE7;
+  --f-display:"Poppins",system-ui,sans-serif; --f-corpo:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --raio:12px; --raio-campo:8px; --sombra:0 4px 20px rgba(26,26,26,.07);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --laranja-texto:#F8B84D; --laranja-tenue:#3A2A10; --marinho:#0A2240; --marinho-2:#14365F;
+  --fundo:#14120E; --superficie:#1E1B16; --tinta:#F3EEE6; --tinta-2:#BDB6AA; --tinta-3:#8C857A; --borda:#36312A;
+  --verde:#86CC91; --verde-tenue:#14301A; --erro:#F1A196; --erro-tenue:#3A1612; --sombra:0 4px 20px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --laranja-texto:#F8B84D; --laranja-tenue:#3A2A10; --marinho:#0A2240; --marinho-2:#14365F;
+  --fundo:#14120E; --superficie:#1E1B16; --tinta:#F3EEE6; --tinta-2:#BDB6AA; --tinta-3:#8C857A; --borda:#36312A;
+  --verde:#86CC91; --verde-tenue:#14301A; --erro:#F1A196; --erro-tenue:#3A1612; --sombra:0 4px 20px rgba(0,0,0,.4); color-scheme:dark}
+
+[hidden]{display:none!important}
+body{background:var(--fundo);color:var(--tinta);font-family:var(--f-corpo);font-size:16px;line-height:1.55}
+.faixa{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1140px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.rotulo{font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--laranja);outline-offset:2px}
+
+/* Topo */
+.topo{background:var(--laranja);color:var(--grafite)}
+.topo .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;padding-block:16px}
+.topo img{height:30px;width:auto;display:block}
+.topo a.wpp{font-weight:600;font-size:14px;text-decoration:none;border:1.5px solid var(--grafite);border-radius:999px;padding:6px 14px}
+.topo a.wpp:hover{background:var(--grafite);color:var(--laranja)}
+
+/* Herói + formulário */
+.heroi .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:40px;align-items:start;padding-block:48px 56px}
+@media (max-width:900px){.heroi .wrap{grid-template-columns:minmax(0,1fr);gap:28px;padding-block:32px 40px}}
+.etapa{display:inline-flex;align-items:center;gap:8px;color:var(--laranja-texto);font-weight:700}
+.etapa b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--laranja);color:var(--grafite);font-size:13px}
+.heroi h1{font-size:clamp(32px,5vw,54px);font-weight:800;letter-spacing:-.02em;margin-top:14px}
+.heroi h1 em{font-style:normal;color:var(--laranja-texto)}
+.heroi .lead{font-size:clamp(17px,1.6vw,19px);color:var(--tinta-2);margin-top:18px;max-width:52ch}
+.dado{margin-top:28px;display:flex;gap:16px;align-items:center;padding:18px 20px;border-radius:var(--raio);background:var(--laranja-tenue);max-width:520px}
+.dado strong{font:800 44px/1 var(--f-display);color:var(--laranja-texto);flex:none;font-variant-numeric:tabular-nums}
+.dado p{font-size:15px;color:var(--tinta)}
+.dado small{display:block;color:var(--tinta-2);font-size:13px;margin-top:2px}
+
+.form{background:var(--superficie);border:1px solid var(--borda);border-radius:16px;box-shadow:var(--sombra);padding:28px;display:grid;gap:16px}
+.form h2{font-size:22px;font-weight:700}
+.form .sub{color:var(--tinta-2);font-size:15px;margin-top:-8px}
+.campo{display:grid;gap:6px}
+.campo label{font-size:14px;font-weight:600}
+.campo input{font:500 16px var(--f-corpo);color:var(--tinta);background:var(--fundo);border:1.5px solid var(--borda);border-radius:var(--raio-campo);padding:12px 14px;width:100%;box-sizing:border-box}
+.campo input:focus{border-color:var(--laranja);outline:none;box-shadow:0 0 0 3px var(--laranja-tenue)}
+.campo input[aria-invalid=true]{border-color:var(--erro)}
+.campo .err{font-size:13px;color:var(--erro);min-height:0}
+.duas{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:480px){.duas{grid-template-columns:minmax(0,1fr)}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:700 17px var(--f-display);border:0;border-radius:10px;padding:15px 22px;cursor:pointer;text-decoration:none;background:var(--laranja);color:var(--grafite)}
+.btn:hover{filter:brightness(.95)}
+.btn.escuro{background:var(--grafite);color:var(--laranja)}
+.lgpd{font-size:12.5px;color:var(--tinta-3)}
+/* Isca anti-robô: sai do fluxo sem usar display:none, que alguns bots detectam. */
+.armadilha{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.aceite{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--tinta-2);cursor:pointer}
+.aceite input{flex:none;width:18px;height:18px;margin:1px 0 0;accent-color:var(--laranja);cursor:pointer}
+.aceite a{color:var(--laranja-texto);font-weight:600}
+.aceite input[aria-invalid=true]{outline:2px solid var(--erro);outline-offset:2px}
+#aceite-err{font-size:13px;color:var(--erro);margin-top:-6px}
+#aceite-err:empty{display:none}
+.ok{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:var(--raio-campo);background:var(--verde-tenue);color:var(--verde);font-weight:600;font-size:15px}
+
+/* Calculadora */
+.calc{background:var(--marinho);color:var(--sobre-marinho)}
+.calc .wrap{padding-block:56px;display:grid;gap:28px}
+.calc .etapa{color:var(--laranja)}
+.calc h2{font-size:clamp(26px,3.6vw,40px);font-weight:800;color:var(--sobre-marinho)}
+.calc .intro p{color:var(--sobre-marinho-2);max-width:62ch;margin-top:10px}
+.grade{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.9fr);gap:24px;align-items:start}
+@media (max-width:960px){.grade{grid-template-columns:minmax(0,1fr)}}
+
+.painel{background:var(--marinho-2);border-radius:16px;padding:28px;display:grid;gap:24px;position:relative}
+.entradas{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:560px){.entradas{grid-template-columns:minmax(0,1fr)}}
+.entradas label{display:grid;gap:6px;font-size:14px;font-weight:600;color:var(--sobre-marinho)}
+.entradas small{font-weight:400;color:var(--sobre-marinho-2);font-size:12.5px}
+.entradas input{font:700 24px var(--f-display);color:var(--sobre-marinho);background:var(--marinho);border:1.5px solid rgba(255,255,255,.18);border-radius:var(--raio-campo);padding:10px 14px;width:100%;box-sizing:border-box;font-variant-numeric:tabular-nums}
+.entradas input:focus{border-color:var(--laranja);outline:none}
+
+.perdas{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:560px){.perdas{grid-template-columns:minmax(0,1fr)}}
+.perda{display:grid;gap:4px;padding:20px;border-radius:var(--raio);background:var(--marinho)}
+.perda .rotulo{color:var(--sobre-marinho-2)}
+.perda strong{font:800 clamp(22px,11cqi,46px)/1.05 var(--f-display);color:var(--laranja);font-variant-numeric:tabular-nums;letter-spacing:-.02em;white-space:nowrap}
+.perda{min-width:0;container-type:inline-size}
+.perda span{color:var(--sobre-marinho-2);font-size:14px}
+.perda .selo{display:inline-block;width:fit-content;margin-top:6px;background:var(--laranja);color:var(--grafite);font:700 13px var(--f-corpo);border-radius:999px;padding:3px 10px;transform-origin:left center}
+.selo.estala{animation:estala .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes estala{0%{transform:scale(.6)}100%{transform:scale(1)}}
+
+.conta{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid rgba(255,255,255,.12)}
+.conta li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:baseline;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.12);font-size:15px;color:var(--sobre-marinho-2)}
+.conta li b{color:var(--sobre-marinho);font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.conta .n{font:600 13px var(--f-mono);color:var(--laranja)}
+.conta s{color:var(--sobre-marinho-2);opacity:.7}
+.impacto{font-size:15px;color:var(--sobre-marinho-2)}
+.impacto b{color:var(--sobre-marinho)}
+
+.plano{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 24px;align-items:center;padding:22px;border-radius:var(--raio);background:var(--superficie);color:var(--tinta)}
+@media (max-width:560px){.plano{grid-template-columns:minmax(0,1fr)}}
+.plano .rotulo{color:var(--verde)}
+.plano h3{font-size:18px;font-weight:700;margin-top:4px}
+.plano p{font-size:14px;color:var(--tinta-2);margin-top:4px}
+.plano .preco{text-align:right}
+@media (max-width:560px){.plano .preco{text-align:left}}
+.plano .preco strong{display:block;font:800 34px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.plano .preco span{font-size:13px;color:var(--tinta-2)}
+.economia{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding-top:14px;border-top:1px solid var(--borda);font-size:15px}
+.economia .pill{background:var(--verde-tenue);color:var(--verde);font-weight:700;border-radius:999px;padding:4px 12px}
+
+.trava{position:absolute;inset:0;border-radius:16px;background:rgba(11,43,81,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:grid;place-items:center;text-align:center;padding:24px}
+.trava div{display:grid;gap:12px;justify-items:center;max-width:36ch}
+.trava p{color:var(--sobre-marinho)}
+.trava h3{color:var(--sobre-marinho);font-size:22px}
+
+/* Propaganda */
+.prop{background:var(--laranja);color:var(--grafite);border-radius:16px;padding:28px;display:grid;gap:18px}
+.prop img{height:30px;width:auto}
+.prop h3{font-size:26px;font-weight:800}
+.prop > p{font-size:16px}
+.prop ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.prop li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;font-size:15px}
+.prop li svg{margin-top:3px}
+.prop li b{display:block;font-weight:700}
+.prop .rodape{display:flex;flex-wrap:wrap;gap:8px}
+.prop .chip{border:1.5px solid var(--grafite);border-radius:999px;padding:3px 10px;font-size:13px;font-weight:600}
+
+/* CTA */
+.cta{background:var(--fundo)}
+.cta .wrap{padding-block:56px;display:grid;justify-items:center;text-align:center;gap:16px}
+.cta h2{font-size:clamp(28px,4vw,44px);font-weight:800;max-width:22ch}
+.cta p{color:var(--tinta-2);max-width:56ch}
+.cta .btn{font-size:20px;padding:18px 30px;margin-top:8px}
+.cta .tel{font:600 15px var(--f-mono);color:var(--tinta-2)}
+.fonte{font-size:11.5px;line-height:1.5;font-style:italic;color:var(--tinta-3);max-width:80ch;margin-top:12px;text-align:justify;text-align-last:center}
+.fonte a{color:var(--tinta-2)}
+
+footer{background:var(--marinho);color:var(--sobre-marinho-2);font-size:13px}
+footer .wrap{padding-block:24px;display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center}
+footer img{height:22px;width:auto}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<header class="topo faixa">
+  <div class="wrap">
+    <img src="assets/logo-infoco-marinho.png" width="480" height="120" alt="In Foco">
+    <!-- href e texto são reescritos pelo JS a partir da constante WHATSAPP; o valor abaixo é só reserva. -->
+    <a class="wpp" id="wpp-topo" href="https://wa.me/5569999565508" target="_blank" rel="noopener">WhatsApp (69) 99956-5508</a>
+  </div>
+</header>
+
+<main>
+  <section class="heroi faixa" aria-labelledby="titulo">
+    <div class="wrap">
+      <div>
+        <span class="etapa"><b>1</b> Seus dados</span>
+        <h1 id="titulo">Quanto a distração digital está <em>custando</em> para a sua empresa?</h1>
+        <p class="lead">Celular, redes sociais, apostas e vídeos tiram horas de trabalho todos os dias. Preencha seus dados e veja, em reais, quanto isso pesa na folha da sua empresa por mês e por ano.</p>
+        <div class="dado">
+          <strong>2h</strong>
+          <p>A pessoa média perde quase 2 horas por dia com distrações digitais.<small>Harvard Business Review, via CBN Ribeirão</small></p>
+        </div>
+      </div>
+
+      <form class="form" id="form" novalidate aria-labelledby="form-titulo">
+        <h2 id="form-titulo">Libere sua calculadora</h2>
+        <p class="sub">Leva 30 segundos. O resultado aparece logo abaixo.</p>
+        <div class="campo">
+          <label for="nome">Seu nome</label>
+          <input id="nome" name="nome" autocomplete="name" placeholder="Ex.: Maria Souza" required>
+          <span class="err" id="nome-err"></span>
+        </div>
+        <div class="campo">
+          <label for="empresa">Nome da empresa</label>
+          <input id="empresa" name="empresa" autocomplete="organization" placeholder="Ex.: Souza Contabilidade" required>
+          <span class="err" id="empresa-err"></span>
+        </div>
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="voce@empresa.com.br" required>
+          <span class="err" id="email-err"></span>
+        </div>
+        <div class="duas">
+          <div class="campo">
+            <label for="whatsapp">WhatsApp</label>
+            <input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="(69) 99999-9999" required>
+            <span class="err" id="whatsapp-err"></span>
+          </div>
+          <div class="campo">
+            <label for="computadores">Quantos computadores?</label>
+            <input id="computadores" name="computadores" type="number" min="1" max="9999" step="1" inputmode="numeric" placeholder="Ex.: 10" required>
+            <span class="err" id="computadores-err"></span>
+          </div>
+        </div>
+        <!-- Isca anti-robô: invisível e fora da ordem de tabulação. Humano nunca preenche; se vier preenchido, descartamos. -->
+        <div class="armadilha" aria-hidden="true">
+          <label for="site">Não preencha este campo</label>
+          <input id="site" name="site" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <label class="aceite" for="aceite">
+          <input id="aceite" type="checkbox" required>
+          <span>Autorizo o In Foco a usar meus dados para entrar em contato sobre o serviço. <a href="/privacidade.html" target="_blank" rel="noopener">Política de privacidade</a>.</span>
+        </label>
+        <span class="err" id="aceite-err"></span>
+        <button class="btn" type="submit" id="enviar">Ver quanto minha empresa perde</button>
+        <div class="ok" id="ok" hidden role="status">✓ Pronto! Sua calculadora está liberada logo abaixo.</div>
+        <p class="lgpd">Usamos seus dados só para falar com você sobre o In Foco. Nada de spam, e você pode pedir a exclusão a qualquer momento.</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="calc faixa" id="calculadora" aria-labelledby="calc-titulo">
+    <div class="wrap">
+      <div class="intro">
+        <span class="etapa"><b>2</b> Tamanho do Prejuízo</span>
+        <h2 id="calc-titulo" style="margin-top:12px">O tempo perdido vira dinheiro perdido</h2>
+        <p>Somos conservadores: em vez de 2 horas, consideramos 1h30 por dia, 22 dias úteis por mês e a hora do salário mínimo. Ajuste a quantidade de funcionários e, se quiser, o salário médio da sua equipe.</p>
+      </div>
+
+      <div class="grade">
+        <div class="painel" id="painel">
+          <div class="entradas">
+            <label for="funcionarios">Funcionários que usam computador ou celular
+              <input id="funcionarios" type="number" min="1" max="9999" step="1" value="10" inputmode="numeric">
+            </label>
+            <label for="salario">Salário médio (R$) <small>Padrão: salário mínimo de R$ 1.621</small>
+              <input id="salario" type="text" inputmode="decimal" value="1.621,00">
+            </label>
+          </div>
+
+          <div class="perdas" aria-live="polite">
+            <div class="perda">
+              <span class="rotulo">Perda por mês</span>
+              <strong id="p-mes">R$ 2.432,10</strong>
+              <span id="p-mes-obs">para 10 funcionários</span>
+              <span class="selo" id="selo-mes">1,5 salário</span>
+            </div>
+            <div class="perda">
+              <span class="rotulo">Perda em 12 meses</span>
+              <strong id="p-ano">R$ 29.185,20</strong>
+              <span id="p-ano-obs">49,5 dias úteis de cada funcionário: mais de 2 meses de trabalho pagos sem entrega</span>
+            </div>
+          </div>
+
+          <ol class="conta" aria-label="Como chegamos nesse valor">
+            <li><span class="n">01</span><span>Média de tempo perdido por dia <s>2h</s> → usamos</span><b>1h30</b></li>
+            <li><span class="n">02</span><span>1h30 × 22 dias úteis</span><b>33 h/mês</b></li>
+            <li><span class="n">03</span><span id="c-hora">33 h × R$ 7,37 (hora do salário)</span><b id="c-func">R$ 243,21</b></li>
+            <li><span class="n">04</span><span id="c-mult">× 10 funcionários</span><b id="c-mes">R$ 2.432,10</b></li>
+            <li><span class="n">05</span><span>× 12 meses</span><b id="c-ano">R$ 29.185,20</b></li>
+          </ol>
+          <p class="impacto"><b>Menos produção. Mais erros. Retrabalho.</b> E isso sem contar encargos, 13º e férias.</p>
+
+          <div class="plano">
+            <div>
+              <span class="rotulo">Quanto custa resolver</span>
+              <h3 id="plano-titulo">Plano In Foco para 10 computadores</h3>
+              <p id="plano-det">R$ 15,90 por computador · sem fidelidade</p>
+            </div>
+            <div class="preco"><strong id="plano-preco">R$ 159,00</strong><span>por mês</span></div>
+            <div class="economia" id="economia"></div>
+          </div>
+
+          <div class="trava" id="trava">
+            <div>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F59600" stroke-width="2" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2" fill="none"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+              <h3>Preencha seus dados para ver o resultado</h3>
+              <p>A calculadora é liberada assim que você enviar o formulário acima.</p>
+              <a class="btn" href="#form" id="ir-form">Preencher agora</a>
+            </div>
+          </div>
+        </div>
+
+        <aside class="prop" aria-label="Sobre o In Foco">
+          <img src="assets/logo-infoco-marinho.png" width="480" height="120" loading="lazy" alt="In Foco">
+          <h3>O que não deve abrir, não abre.</h3>
+          <p>O In Foco controla o acesso à internet nos computadores da sua empresa. Você escolhe o que pode ser acessado, e o resto é bloqueado antes de a página carregar.</p>
+          <ul>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span><b>Bloqueio por categoria em 1 clique</b>Redes sociais, apostas, streaming, jogos e conteúdo adulto.</span></li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span><b>Regras por setor e horário</b>Redes sociais liberadas só no almoço, se você quiser.</span></li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span><b>Proteção contra golpes</b>Phishing e boleto falso barrados antes de abrir.</span></li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span><b>Controle da máquina, não da pessoa</b>Relatórios por computador e setor, sem vigiar ninguém.</span></li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2.4" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span><b>Pronto em 1 hora</b>Sem servidor, sem VPN e sem equipe de TI.</span></li>
+          </ul>
+          <div class="rodape"><span class="chip">Sem fidelidade</span><span class="chip">Suporte em português</span><span class="chip">Funciona em qualquer rede</span></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta faixa" aria-labelledby="cta-titulo">
+    <div class="wrap">
+      <h2 id="cta-titulo">Pare de pagar por horas que não voltam.</h2>
+      <p id="cta-texto">Fale com a equipe do In Foco pelo WhatsApp e receba uma demonstração gratuita, sem compromisso.</p>
+      <a class="btn" id="cta" href="https://wa.me/5569999565508" target="_blank" rel="noopener">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="#1A1A1A" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>
+        Quero economizar agora
+      </a>
+      <span class="tel" id="wpp-tel">(69) 99956-5508</span>
+      <p class="fonte">Fonte do dado de 2 horas: <a href="https://cbnribeirao.com.br/foco-no-celular-faz-trabalhadores-perderem-ate-um-mes-de-servico-por-ano/" target="_blank" rel="noopener">CBN Ribeirão, “Foco no celular faz trabalhadores perderem até um mês de serviço por ano”</a>, citando a Harvard Business Review. O cálculo é uma estimativa: usa 1h30 por dia, 22 dias úteis por mês, jornada de 220 horas mensais e não inclui encargos.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="faixa">
+  <div class="wrap">
+    <img src="assets/logo-infoco-branco.png" width="520" height="130" loading="lazy" alt="In Foco">
+    <span>Santos e Cia LTDA · CNPJ 34.036.537/0001-23</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ===== Configuração =====
+     Estes dois valores são os únicos que precisam ser trocados para a página entrar no ar. */
+
+  /* Número do WhatsApp da equipe, só dígitos, com 55 + DDD. Alimenta os três links da página. */
+  const WHATSAPP = "5569999565508";
+
+  /* ⚠️ OBRIGATÓRIO: URL do App da Web do Apps Script (termina em /exec), que grava os leads na planilha.
+     Enquanto estiver vazio, NENHUM lead é salvo — ele só existe na mensagem do WhatsApp.
+     Como obter: na planilha, Extensões → Apps Script → cole o apps-script-leads-in-foco.gs →
+     Implantar → Nova implantação → App da Web → Executar como "Eu", Acesso "Qualquer pessoa" → copie a URL. */
+  const LEAD_ENDPOINT = "";
+
+  /* Envia um evento para a planilha. text/plain + no-cors evita o bloqueio de CORS do Apps Script.
+     Com no-cors não dá para ler a resposta: a falha é silenciosa por natureza. Por isso o aviso abaixo. */
+  function enviarPlanilha(evento, dados){
+    if(!LEAD_ENDPOINT){
+      console.warn("[In Foco] LEAD_ENDPOINT vazio: o lead NÃO foi gravado na planilha. Configure a URL /exec do Apps Script.");
+      return;
+    }
+    const corpo = JSON.stringify({evento, pagina: location.href.split("#")[0], ...dados});
+    try{
+      fetch(LEAD_ENDPOINT, {method:"POST", mode:"no-cors", keepalive:true, headers:{"Content-Type":"text/plain;charset=utf-8"}, body: corpo}).catch(()=>{});
+    }catch(e){}
+  }
+  function utms(){
+    const q = new URLSearchParams(location.search), r = {};
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(k=>{ if(q.get(k)) r[k]=q.get(k); });
+    return r;
+  }
+  function novoId(){
+    try{ return crypto.randomUUID(); }catch(e){ return "L" + Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+  }
+  let ultimoCalculo = null;
+
+  const HORAS_DIA = 1.5, DIAS_UTEIS = 22, HORAS_MES_JORNADA = 220, SAL_MIN = 162100;
+  /* Mesma tabela de precificacao.ts — FAIXAS_PADRAO (preço da faixa para todas as máquinas) */
+  const FAIXAS = [{ate:1,p:1990},{ate:5,p:1790},{ate:10,p:1590},{ate:20,p:1390},{ate:35,p:1190},{ate:Infinity,p:990}];
+
+  const $ = id => document.getElementById(id);
+
+  /* Um único lugar define o telefone: a constante WHATSAPP alimenta os três pontos da página. */
+  function aplicarWhatsapp(){
+    const d = WHATSAPP.replace(/\D/g,"").replace(/^55/,"");
+    const bonito = d.length>=10 ? `(${d.slice(0,2)}) ${d.slice(2,d.length-4)}-${d.slice(-4)}` : WHATSAPP;
+    $("wpp-topo").href = `https://wa.me/${WHATSAPP}`;
+    $("wpp-topo").textContent = "WhatsApp " + bonito;
+    $("wpp-tel").textContent = bonito;
+  }
+  aplicarWhatsapp();
+  const brl = c => (c/100).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  const fmt1 = v => v.toLocaleString("pt-BR",{maximumFractionDigits:1});
+  const plural = (n,s,p) => `${n.toLocaleString("pt-BR")} ${n===1?s:p}`;
+  const precoFaixa = q => FAIXAS.find(f=>q<=f.ate).p;
+
+  let lead = null;
+  try{ const s = sessionStorage.getItem("infoco-lead"); if(s) lead = JSON.parse(s); }catch(e){}
+
+  /* ===== Etapa 1: formulário ===== */
+  const wpp = $("whatsapp");
+  wpp.addEventListener("input", ()=>{
+    const d = wpp.value.replace(/\D/g,"").slice(0,11);
+    let v = d;
+    if(d.length>2) v = `(${d.slice(0,2)}) ${d.slice(2)}`;
+    if(d.length>7) v = `(${d.slice(0,2)}) ${d.slice(2, d.length-4)}-${d.slice(-4)}`;
+    wpp.value = v;
+  });
+
+  function erro(id,msg){ const el=$(id); el.setAttribute("aria-invalid", msg?"true":"false"); $(id+"-err").textContent = msg||""; return !msg; }
+
+  function validar(){
+    const nome=$("nome").value.trim(), empresa=$("empresa").value.trim(), email=$("email").value.trim();
+    const tel=wpp.value.replace(/\D/g,""), pcs=Number($("computadores").value);
+    let ok = true;
+    ok = erro("nome", nome.length<2 ? "Informe seu nome." : "") && ok;
+    ok = erro("empresa", empresa.length<2 ? "Informe o nome da empresa." : "") && ok;
+    ok = erro("email", !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? "Informe um e-mail válido, como voce@empresa.com.br." : "") && ok;
+    ok = erro("whatsapp", (tel.length<10||tel.length>11) ? "Informe o WhatsApp com DDD, como (69) 99999-9999." : "") && ok;
+    ok = erro("computadores", (!Number.isInteger(pcs)||pcs<1) ? "Informe quantos computadores a empresa tem." : "") && ok;
+    ok = erro("aceite", !$("aceite").checked ? "Marque a autorização para continuar." : "") && ok;
+    /* aceite vai junto: a LGPD pede que o consentimento fique registrado, não só coletado. */
+    return ok ? {nome, empresa, email, whatsapp: wpp.value, computadores: pcs, aceite: true} : null;
+  }
+
+  $("form").addEventListener("submit", e=>{
+    e.preventDefault();
+    /* Robô preencheu a isca: finge que deu certo e não grava nada. */
+    if($("site").value){ liberar(true); return; }
+    const dados = validar();
+    if(!dados){ const prim = document.querySelector('[aria-invalid="true"]'); if(prim) prim.focus(); return; }
+    lead = {id: (lead && lead.id) || novoId(), ...dados, origem: "landing-tamanho-do-prejuizo", ...utms()};
+    try{ sessionStorage.setItem("infoco-lead", JSON.stringify(lead)); }catch(e){}
+    enviarPlanilha("cadastro", lead);
+    $("funcionarios").value = dados.computadores;
+    liberar(true);
+  });
+
+  function liberar(rolar){
+    $("trava").hidden = true;
+    $("ok").hidden = false;
+    $("enviar").textContent = "Atualizar meus dados";
+    calcular(true);
+    if(rolar){ const r = matchMedia("(prefers-reduced-motion: reduce)").matches; $("calculadora").scrollIntoView({behavior: r?"auto":"smooth", block:"start"}); }
+  }
+
+  /* ===== Etapa 2: calculadora ===== */
+  function lerSalario(){
+    const v = Number(String($("salario").value).replace(/[^\d,]/g,"").replace(",", "."));
+    return isFinite(v) && v>0 ? Math.round(v*100) : SAL_MIN;
+  }
+
+  let ultimoSelo = "";
+  function calcular(animar){
+    const func = Math.max(1, Math.round(Number($("funcionarios").value)||1));
+    const sal = lerSalario();
+    const horaCent = Math.round(sal / HORAS_MES_JORNADA);             // R$ 1.621 / 220 = R$ 7,37
+    const horasMes = HORAS_DIA * DIAS_UTEIS;                            // 33 h
+    const porFunc = Math.round(horasMes * horaCent);                    // R$ 243,21
+    const mes = porFunc * func, ano = mes * 12;
+    const salarios = mes / sal;
+    const diasAno = HORAS_DIA * DIAS_UTEIS * 12 / 8;                    // 49,5 dias úteis por pessoa
+    const mesesTrab = diasAno / DIAS_UTEIS;                             // 2,25 meses
+
+    $("p-mes").textContent = brl(mes);
+    $("p-mes-obs").textContent = "para " + plural(func,"funcionário","funcionários");
+    const selo = `${fmt1(salarios)} ${salarios>=1.95?"salários":"salário"}${sal===SAL_MIN?" mínimo"+(salarios>=1.95?"s":""):""}`;
+    $("selo-mes").textContent = "= " + selo;
+    if(animar && selo!==ultimoSelo){ const s=$("selo-mes"); s.classList.remove("estala"); void s.offsetWidth; s.classList.add("estala"); }
+    ultimoSelo = selo;
+    $("p-ano").textContent = brl(ano);
+    $("p-ano-obs").textContent = `${fmt1(diasAno)} dias úteis de cada funcionário: mais de ${Math.floor(mesesTrab)} meses de trabalho pagos sem entrega`;
+    $("c-hora").textContent = `33 h × ${brl(horaCent)} (hora ${sal===SAL_MIN?"do salário mínimo":"do salário informado"})`;
+    $("c-func").textContent = brl(porFunc);
+    $("c-mult").textContent = "× " + plural(func,"funcionário","funcionários");
+    $("c-mes").textContent = brl(mes);
+    $("c-ano").textContent = brl(ano);
+
+    const pcs = lead ? lead.computadores : func;
+    const unit = precoFaixa(pcs), plano = unit*pcs;
+    $("plano-titulo").textContent = "Plano In Foco para " + plural(pcs,"computador","computadores");
+    $("plano-det").textContent = `${brl(unit)} por computador · sem fidelidade · cancele quando quiser`;
+    $("plano-preco").textContent = brl(plano);
+    const pct = plano/mes*100;
+    $("economia").innerHTML = mes>plano
+      ? `<span class="pill">O plano custa ${pct<1?"menos de 1":Math.round(pct)}% da perda mensal</span><span>A perda de um mês paga ${Math.floor(mes/plano)} ${Math.floor(mes/plano)===1?"mês":"meses"} de In Foco.</span>`
+      : `<span>Com poucos funcionários a perda é menor, mas a proteção contra golpes e phishing vale para cada computador.</span>`;
+
+    ultimoCalculo = {func, sal, mes, ano, pcs, plano};
+    atualizarCTA(ultimoCalculo);
+  }
+
+  function atualizarCTA(r){
+    let txt = "Olá! Quero economizar agora com o In Foco.";
+    if(lead){
+      txt = `Olá! Quero economizar agora com o In Foco.\n\n`+
+        `Nome: ${lead.nome}\nEmpresa: ${lead.empresa}\nE-mail: ${lead.email}\nWhatsApp: ${lead.whatsapp}\nComputadores: ${lead.computadores}\n\n`+
+        `Pela calculadora, com ${r.func} funcionários perco ${brl(r.mes)} por mês (${brl(r.ano)} por ano). `+
+        `O plano para ${r.pcs} computadores sai por ${brl(r.plano)}/mês.`;
+    }
+    $("cta").href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(txt)}`;
+  }
+
+  $("cta").addEventListener("click", ()=>{
+    if(!lead || !ultimoCalculo) return;
+    const c = ultimoCalculo;
+    enviarPlanilha("clicou_whatsapp", {
+      id: lead.id, nome: lead.nome, empresa: lead.empresa, email: lead.email, whatsapp: lead.whatsapp, computadores: lead.computadores,
+      funcionarios: c.func, salario_medio: c.sal/100, perda_mes: c.mes/100, perda_ano: c.ano/100, plano_mes: c.plano/100
+    });
+  });
+
+  /* Sem isso o leitor de tela lê os valores a cada tecla. Silencia durante a digitação
+     e volta a anunciar depois de 700 ms parado, quando o número já está estável. */
+  const perdas = document.querySelector(".perdas");
+  let silencio;
+  function recalcular(){
+    perdas.setAttribute("aria-live","off");
+    calcular(true);
+    clearTimeout(silencio);
+    silencio = setTimeout(()=>perdas.setAttribute("aria-live","polite"), 700);
+  }
+  ["funcionarios","salario"].forEach(id=>$(id).addEventListener("input", recalcular));
+  $("salario").addEventListener("blur", ()=>{ $("salario").value = (lerSalario()/100).toLocaleString("pt-BR",{minimumFractionDigits:2}); calcular(false); });
+  $("ir-form").addEventListener("click", e=>{ e.preventDefault(); $("form").scrollIntoView({behavior:"smooth",block:"center"}); setTimeout(()=>$("nome").focus({preventScroll:true}),400); });
+
+  if(lead){
+    ["nome","empresa","email","whatsapp","computadores"].forEach(k=>{ if(lead[k]!=null) $(k).value = lead[k]; });
+    $("funcionarios").value = lead.computadores;
+    liberar(false);
+  } else {
+    calcular(false);
+  }
+})();
+</script>
+
+</body>
+</html>
