@@ -75,11 +75,18 @@ Usamos Git — assim atualizar o site vira `git push`.
 2. Cole a URL do repositório e selecione o branch `master`.
 3. **Build Pack: Dockerfile** — não "Static" nem "Nixpacks". O `Dockerfile` da raiz já
    monta o nginx com os cabeçalhos e o cache corretos.
-4. **Port: 80** (é o que o container expõe).
+4. **Ports Exposes: 80**. Esse campo não aparece no formulário de criação quando o
+   build pack é Dockerfile — fica na tela de configuração, em **Network**, e vem com
+   **3000** por padrão. O `EXPOSE 80` do Dockerfile não o sobrescreve. Se ficar 3000,
+   o deploy conclui, o container fica *healthy* e mesmo assim o site responde **502**,
+   porque o proxy encaminha para uma porta onde ninguém escuta.
 5. Em **Domains**, informe `https://produtivo.estudyou.com`. O Coolify emite o certificado
-   via Let's Encrypt automaticamente — o TLS é terminado no proxy dele (Traefik), e por isso
-   o `nginx.conf` daqui fala HTTP puro dentro do container.
-6. **Deploy**.
+   via Let's Encrypt automaticamente — o TLS é terminado no proxy dele (Caddy, neste
+   servidor), e por isso o `nginx.conf` daqui fala HTTP puro dentro do container.
+   Só configure o domínio depois que o DNS resolver: sem isso a emissão do certificado
+   falha e o Let's Encrypt limita as tentativas.
+6. **Deploy**. Ao mudar qualquer configuração depois, o Coolify avisa
+   "unapplied configuration changes" — é preciso **Redeploy** para valer.
 
 **Atualizando depois**
 
