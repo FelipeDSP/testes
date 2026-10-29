@@ -17,26 +17,27 @@ teste-apps-script.js           testes do .gs, rodam no Node sem precisar do Goog
 
 ## Antes de publicar
 
-### 1. Ligar a gravação dos leads  ⚠️ sem isso nenhum lead é salvo
+### 1. Gravação dos leads  ✅ feito
 
-1. Crie uma planilha no Google Sheets.
-2. Nela, vá em **Extensões → Apps Script**. Precisa ser por dentro da planilha:
-   criado como projeto avulso, o script não enxerga a planilha e não grava nada.
-3. Apague o conteúdo do editor e cole o `apps-script-leads-in-foco.gs`.
-4. Rode a função `testarGravacao` uma vez (▶ Executar) para autorizar e conferir
-   se a aba **Leads** aparece preenchida. Depois apague as linhas de teste.
-5. **Implantar → Nova implantação → App da Web**
-   - Executar como: **Eu**
-   - Quem pode acessar: **Qualquer pessoa**
-6. Copie a URL gerada (termina em `/exec`) e cole em `index.html`, na constante
-   `LEAD_ENDPOINT` (fica logo no começo do `<script>`).
+Está tudo no ar e verificado:
 
-Para conferir que funcionou: abra a página publicada, preencha o formulário e veja se a
-linha aparece na planilha. Se abrir o console do navegador (F12) e houver um aviso
-`[In Foco] LEAD_ENDPOINT vazio`, é porque o passo 6 não foi feito.
+- Planilha **Leads In Foco** (`1metdDbiDck9CqOgRA-jJTmrbLxt0CbhKNFfqIFbMnCQ`), aba **Leads**
+- Projeto Apps Script vinculado a ela, implantado como App da Web, Versão 1
+- `LEAD_ENDPOINT` preenchido no `index.html`
 
-> Toda vez que você alterar o `.gs`, precisa fazer **Implantar → Gerenciar implantações →
-> editar → Nova versão**. Sem isso a URL continua servindo o código antigo.
+**Se algum dia precisar alterar o `.gs`:** editar não basta. É preciso
+**Implantar → Gerenciar implantações → editar (lápis) → Versão: Nova versão → Implantar**.
+Sem isso a URL continua servindo o código antigo, silenciosamente. A URL `/exec`
+não muda ao criar nova versão — só muda se você criar uma implantação do zero.
+
+**Teste rápido do endpoint** a qualquer momento, pelo navegador ou terminal:
+
+```bash
+curl https://script.google.com/macros/s/AKfycbyLgCo5fM0JFJSVWesRUJ4zmieDtOo8PRHr24K2xGmrcHoRbe8VeTi_1_KRIe8A6D8lnw/exec
+# esperado: {"ok":true,"servico":"Leads In Foco"}
+```
+
+Se devolver outra coisa, a implantação caiu ou foi substituída.
 
 ### 2. Domínio nas meta tags  ✅ feito
 
